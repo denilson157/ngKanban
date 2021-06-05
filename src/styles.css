@@ -1,4 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    color: #e6e6e6;
+    margin: 0px !important;
+    background-color: #303030;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* main {
+    max-width: 80vw;
+    margin: 0 auto;
+    padding: 25px;
+} */
