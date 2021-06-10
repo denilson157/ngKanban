@@ -13,7 +13,7 @@ import { ConfirmComponent } from './views/dialogs/confirm/confirm.component';
 //Angular Components
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,15 +25,21 @@ import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
+import { EditarTarefaComponent } from './views/dialogs/editar-tarefa/editar-tarefa.component';
+import { CategoriaComponent } from './views/categoria/categoria.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     ListaComponent,
-    ConfirmComponent
+    ConfirmComponent,
+    EditarTarefaComponent,
+    CategoriaComponent
   ],
   imports: [
+    ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,

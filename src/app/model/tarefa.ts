@@ -3,7 +3,7 @@ export class Tarefa {
     nome: string;
     listaId: number;
 
-    constructor(nome: string, listaId: number) {
+    constructor(listaId: number, nome: string) {
         this.nome = nome;
         this.listaId = listaId;
     }

@@ -16,10 +16,19 @@ export class TarefaService {
   insert = (tarefa: Tarefa): Observable<Lista> => {
     //pega lista da tarefa
     this._listaService.get(tarefa.listaId)
-      .subscribe(listaTarefa => {
+      .subscribe((lista: Lista) => {
+
+        const listaTarefa = { ...lista };
+
+        if (!listaTarefa.tarefas)
+          listaTarefa.tarefas = new Array<Tarefa>();
+
         //adiciona mais uma tarefa a lista e atualiza
         listaTarefa.tarefas.push(tarefa);
-        return this._listaService.update(listaTarefa);
+
+        listaTarefa.tarefas = listaTarefa.tarefas.slice();
+
+        return listaTarefa;
 
       }, () => {
         return EMPTY;

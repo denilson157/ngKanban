@@ -2,26 +2,24 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Lista } from 'src/app/model/lista';
-import { Tarefa } from 'src/app/model/tarefa';
-import { ListaService } from 'src/app/service/lista.service';
+import { Categoria } from 'src/app/model/categoria';
+import { CategoriaService } from 'src/app/service/categoria.service';
 import { ConfirmComponent } from '../dialogs/confirm/confirm.component';
 import { ConfirmationVO } from '../dialogs/confirm/confirmation-vo';
 
 @Component({
-  selector: 'app-lista',
-  templateUrl: './lista.component.html',
-  styleUrls: ['./lista.component.css']
+  selector: 'app-categoria',
+  templateUrl: './categoria.component.html',
+  styleUrls: ['./categoria.component.css']
 })
+export class CategoriaComponent implements OnInit {
 
-export class ListaComponent implements OnInit {
 
-  listas = new Array<Lista>();
+  categorias = new Array<Categoria>();
   columns = ['nome', 'actions'];
 
-  selectedLista?: Lista;
-
-  constructor(private listaService: ListaService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
+  selectedCategoria?: Categoria = undefined;
+  constructor(private categoriaService: CategoriaService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.list();
@@ -32,23 +30,23 @@ export class ListaComponent implements OnInit {
   }
 
   list(): void {
-    this.listaService.list()
+    this.categoriaService.list()
       .subscribe(
-        resp => this.listas = resp,
+        resp => this.categorias = resp,
         error => this.handleServiceError(error as HttpErrorResponse)
       );
   }
 
-  select = (lista: Lista) => {
-    this.selectedLista = { ...lista };
+  select = (categoria: Categoria) => {
+    this.selectedCategoria = { ...categoria };
   }
 
   cancel = () => {
-    this.selectedLista = undefined;
+    this.selectedCategoria = undefined;
   }
 
   save = () => {
-    if (this.selectedLista && !this.selectedLista.id) {
+    if (this.selectedCategoria && !this.selectedCategoria.id) {
       this.insert();
     }
     else {
@@ -78,12 +76,12 @@ export class ListaComponent implements OnInit {
   private delete = (id: number) => {
     if (id) {
 
-      this.listaService.delete(id)
+      this.categoriaService.delete(id)
         .subscribe(
           () => {
             this.list();
             this.cancel();
-            this.showSnackbar('Lista excluída');
+            this.showSnackbar('Categoria excluída');
           },
           error => this.handleServiceError(error as HttpErrorResponse)
         )
@@ -91,23 +89,23 @@ export class ListaComponent implements OnInit {
   }
 
   private update() {
-    if (this.selectedLista) {
-      this.listaService.update(this.selectedLista)
+    if (this.selectedCategoria) {
+      this.categoriaService.update(this.selectedCategoria)
         .subscribe(() => {
           this.list();
           this.cancel();
-          this.showSnackbar('Lista atualizada');
+          this.showSnackbar('Categoria atualizada');
         }, error => this.handleServiceError(error as HttpErrorResponse));
     }
   }
 
   private insert() {
-    if (this.selectedLista) {
-      this.listaService.insert(this.selectedLista)
+    if (this.selectedCategoria) {
+      this.categoriaService.insert(this.selectedCategoria)
         .subscribe(() => {
           this.list();
           this.cancel();
-          this.showSnackbar('Lista inserida');
+          this.showSnackbar('Categoria inserida');
         }, error => this.handleServiceError(error as HttpErrorResponse));
     }
   }
@@ -118,10 +116,9 @@ export class ListaComponent implements OnInit {
   }
 
   create = () => {
-    this.selectedLista = {
+    this.selectedCategoria = {
       id: undefined,
-      nome: '',
-      tarefas: new Array<Tarefa>()
+      nome: ''
     };
   }
 

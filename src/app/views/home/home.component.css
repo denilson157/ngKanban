@@ -1,0 +1,24 @@
+.content {
+    display: -moz-box;
+    display: -webkit-flexbox;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -moz-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    min-height: calc(100vh - 84px);
+    padding: 10px 20px;
+}
+
+.lista {
+    border-radius: .25rem;
+    margin: 5px;
+}
+
+.headerLista{
+    align-items: center;
+    justify-content: space-evenly;
+}

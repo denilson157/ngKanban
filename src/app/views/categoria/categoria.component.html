@@ -1,19 +1,19 @@
-<p>Listas</p>
+<p>Categorias</p>
 
 <button mat-fab color="primary" class="fabAdd" (click)="create();">
     <mat-icon>add</mat-icon>
 </button>
 
 <div>
-    <mat-table [dataSource]="listas">
+    <mat-table [dataSource]="categorias">
         <ng-container matColumnDef="nome">
 
             <mat-header-cell *matHeaderCellDef>
                 Nome
             </mat-header-cell>
 
-            <mat-cell *matCellDef="let lista">
-                {{lista.nome}}
+            <mat-cell *matCellDef="let categoria">
+                {{categoria.nome}}
             </mat-cell>
 
         </ng-container>
@@ -24,11 +24,11 @@
                 Ações
             </mat-header-cell>
 
-            <mat-cell *matCellDef="let lista">
-                <button mat-button (click)="select(lista);">
+            <mat-cell *matCellDef="let categoria">
+                <button mat-button (click)="select(categoria);">
                     <mat-icon>edit</mat-icon>
                 </button>
-                <button mat-button color="warn" (click)="confirmDelete(lista.id)">
+                <button mat-button color="warn" (click)="confirmDelete(categoria.id)">
                     <mat-icon>remove_circle</mat-icon>
                 </button>
             </mat-cell>
@@ -46,12 +46,12 @@
     </mat-table>
 </div>
 
-<div *ngIf="selectedLista" class="editArea">
-    <h2> {{ selectedLista.id ? 'Editar' : 'Criar '}} Lista </h2>
+<div *ngIf="selectedCategoria" class="editArea">
+    <h2> {{ selectedCategoria.id ? 'Editar' : 'Criar '}} Categoria </h2>
 
-    <mat-form-field class="form-field" *ngIf="selectedLista">
+    <mat-form-field class="form-field">
         <mat-label>Nome</mat-label>
-        <input matInput [(ngModel)]="selectedLista.nome">
+        <input matInput [(ngModel)]="selectedCategoria.nome">
     </mat-form-field>
 
 

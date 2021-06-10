@@ -1,0 +1,31 @@
+<div *ngIf="formTarefa">
+
+    <h1 mat-dialog-title>Tarefa</h1>
+
+    <div mat-dialog-content>
+        Tarefa
+    </div>
+
+    <div mat-dialog-action>
+        <form [formGroup]="formTarefa">
+
+            <input type="hidden" formControlName="listaId">
+            <input type="hidden" formControlName="id">
+
+            <mat-form-field class="form-field">
+                <mat-label>Nome</mat-label>
+                <input matInput formControlName="nome">
+            </mat-form-field>
+
+            <div class="d-flex">
+                <button type="submit" color="primary" (click)="save()">
+                    Salvar
+                </button>
+                <button type="button" color="basic" class="btnAction" (click)="cancel()">
+                    Cancelar
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
