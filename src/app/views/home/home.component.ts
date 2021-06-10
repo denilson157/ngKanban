@@ -41,13 +41,18 @@ export class HomeComponent implements OnInit {
     this.listaService.list()
       .subscribe(
         (listas: Array<Lista>) => {
+
+          //calcula o tamanho por igual das colunas
           this.tamanho = 100 / listas.length;
 
           this.tarefaService.list()
             .subscribe((tarefas: Array<Tarefa>) => {
+
+              //apos consultar tarefa e lista, vou colocar as tarefas dentro das listas pelo id
               const listaAtualizar = listas;
 
               listaAtualizar.forEach(lista => {
+                //todas tarefas que tiverem o mesmo id do item
                 lista.tarefas = tarefas.filter(x => x.listaId === lista.id);
               });
 
