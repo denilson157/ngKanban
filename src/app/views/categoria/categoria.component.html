@@ -1,66 +1,71 @@
-<p>Categorias</p>
+<div class="contentMain">
 
-<button mat-fab color="primary" class="fabAdd" (click)="create();">
-    <mat-icon>add</mat-icon>
-</button>
-
-<div>
-    <mat-table [dataSource]="categorias">
-        <ng-container matColumnDef="nome">
-
-            <mat-header-cell *matHeaderCellDef>
-                Nome
-            </mat-header-cell>
-
-            <mat-cell *matCellDef="let categoria">
-                {{categoria.nome}}
-            </mat-cell>
-
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-
-            <mat-header-cell *matHeaderCellDef>
-                Ações
-            </mat-header-cell>
-
-            <mat-cell *matCellDef="let categoria">
-                <button mat-button (click)="select(categoria);">
-                    <mat-icon>edit</mat-icon>
-                </button>
-                <button mat-button color="warn" (click)="confirmDelete(categoria.id)">
-                    <mat-icon>remove_circle</mat-icon>
-                </button>
-            </mat-cell>
-
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="columns">
-
-        </mat-header-row>
-
-        <mat-row *matRowDef="let row; columns: columns">
-
-        </mat-row>
-
-    </mat-table>
-</div>
-
-<div *ngIf="selectedCategoria" class="editArea">
-    <h2> {{ selectedCategoria.id ? 'Editar' : 'Criar '}} Categoria </h2>
-
-    <mat-form-field class="form-field">
-        <mat-label>Nome</mat-label>
-        <input matInput [(ngModel)]="selectedCategoria.nome">
-    </mat-form-field>
+    <p>Categorias</p>
 
 
-    <button mat-raised-button color="primary" (click)="save()">
-        Salvar
+    <button mat-fab color="primary" class="fabAdd" (click)="create();">
+        <mat-icon>add</mat-icon>
     </button>
 
-    <button mat-raised-button class="btnAction" color="basic" (click)="cancel()">
-        Cancelar
-    </button>
+    <div>
+        <mat-table [dataSource]="categorias">
+            <ng-container matColumnDef="nome">
+
+                <mat-header-cell *matHeaderCellDef>
+                    Nome
+                </mat-header-cell>
+
+                <mat-cell *matCellDef="let categoria">
+                    {{categoria.nome}}
+                </mat-cell>
+
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+
+                <mat-header-cell *matHeaderCellDef>
+                    Ações
+                </mat-header-cell>
+
+                <mat-cell *matCellDef="let categoria">
+                    <button mat-button (click)="select(categoria);">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-button color="warn" (click)="confirmDelete(categoria.id)">
+                        <mat-icon>remove_circle</mat-icon>
+                    </button>
+                </mat-cell>
+
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="columns">
+
+            </mat-header-row>
+
+            <mat-row *matRowDef="let row; columns: columns">
+
+            </mat-row>
+
+        </mat-table>
+    </div>
+
+    <div *ngIf="selectedCategoria" class="editArea">
+        <h2> {{ selectedCategoria.id ? 'Editar' : 'Criar '}} Categoria </h2>
+
+        <mat-form-field class="form-field">
+            <mat-label>Nome</mat-label>
+            <input matInput [(ngModel)]="selectedCategoria.nome">
+        </mat-form-field>
+
+
+        <button mat-raised-button color="primary" (click)="save()">
+            Salvar
+        </button>
+
+        <button mat-raised-button class="btnAction" color="basic" (click)="cancel()">
+            Cancelar
+        </button>
+
+    </div>
 
 </div>

@@ -13,10 +13,9 @@
 
 <mat-sidenav-container>
 
-  <!-- <mat-sidenav class="sidenav" #sidenav [mode]="screenWidth > 600 ? 'side' : 'over'" [opened]="screenWidth > 600"> -->
-  <mat-sidenav class="sidenav" #sidenav>
+  <mat-sidenav class="sidenav" #sidenav [mode]="screenWidth > 600 ? 'side' : 'over'" [opened]="screenWidth > 600">
     <mat-nav-list>
-      <a mat-list-item routerLink="about">
+      <a mat-list-item routerLink="sobre">
         <mat-icon class="menu-icon">help</mat-icon> Sobre
       </a>
       <a mat-list-item routerLink="lista">
@@ -30,7 +29,7 @@
 
   <mat-sidenav-content>
     <div style="min-height: calc(100vh - 64px);">
-      <main>
+      <main class="main">
         <router-outlet></router-outlet>
       </main>
     </div>

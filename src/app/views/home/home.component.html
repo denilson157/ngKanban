@@ -1,25 +1,30 @@
 <div class="content">
     <mat-card class="lista" [style.width.%]="tamanho" *ngFor="let coluna of listas">
-        <mat-card-header class="headerLista">
-            {{coluna.nome}}
+        <div class="drag-container" cdkDropList id="{{coluna.id}}" [cdkDropListData]="coluna.tarefas"
+            [cdkDropListConnectedTo]="connectedTo" (cdkDropListDropped)="drop($event)">
 
-            <button mat-mini-fab color="primary" class="fabAdd" (click)="novaTarefa(coluna.id)">
-                <mat-icon>add</mat-icon>
-            </button>
-        </mat-card-header>
+            <mat-card-header class="headerLista">
+                {{coluna.nome}}
 
-        <mat-card-content>
-            <div class="d-flex tarefa justify-content-between" *ngFor="let tarefa of coluna.tarefas">
-                <div>
-                    {{tarefa.nome}}
-                </div>
-                <div>
-                    <button mat-mini-fab color="primary" (click)="editarTarefa(tarefa)">
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                </div>
-            </div>
-        </mat-card-content>
+                <button mat-mini-fab color="primary" class="fabAdd" (click)="novaTarefa(coluna.id)">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </mat-card-header>
 
+            <mat-card-content>
+
+                <mat-card class="d-flex tarefa justify-content-between" *ngFor="let tarefa of coluna.tarefas" cdkDrag>
+                    <div>
+                        {{tarefa.nome}}
+                    </div>
+                    <div>
+                        <button mat-mini-fab color="primary" (click)="editarTarefa(tarefa)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </div>
+                </mat-card>
+            </mat-card-content>
+
+        </div>
     </mat-card>
 </div>

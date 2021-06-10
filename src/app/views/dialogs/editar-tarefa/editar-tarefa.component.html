@@ -1,4 +1,4 @@
-<div *ngIf="formTarefa">
+<div *ngIf="formTarefa" class="formTarefa">
 
     <h1 mat-dialog-title>Tarefa</h1>
 
@@ -15,7 +15,18 @@
 
             <div class="d-flex">
 
-                <mat-form-field appearance="fill">
+                <mat-form-field class="form-field">
+                    <mat-label>Descrição</mat-label>
+                    <textarea matInput formControlName="descricao" rows="10">
+                    </textarea>
+
+                </mat-form-field>
+            </div>
+
+
+            <div class="d-flex">
+
+                <mat-form-field class="form-field" appearance="fill">
                     <mat-label>Categoria</mat-label>
                     <mat-select formControlName="categoriaId">
                         <mat-option [value]="0">

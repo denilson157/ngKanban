@@ -1,16 +1,17 @@
 .content {
-    display: -moz-box;
-    display: -webkit-flexbox;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: -moz-flex;
     display: flex;
-    -webkit-flex-direction: row;
-    -moz-flex-direction: row;
-    -ms-flex-direction: row;
     flex-direction: row;
     min-height: calc(100vh - 84px);
     padding: 10px 20px;
+}
+
+@media only screen and (max-width: 600px) {
+    .content {
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 84px);
+        padding: 10px 20px;
+    }
 }
 
 .lista {
@@ -21,6 +22,7 @@
 .headerLista {
     align-items: center;
     justify-content: space-evenly;
+    margin-bottom: 10px;
 }
 
 .d-flex {
@@ -32,6 +34,12 @@
     justify-content: space-between
 }
 
-.tarefa{
-    padding: 15px 0;
+.tarefa {
+    padding: 10px;
+    margin: 15px 0;
+    cursor: pointer;
+}
+
+.drag-container {
+    min-height: 100%;
 }

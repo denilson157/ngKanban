@@ -28,6 +28,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { EditarTarefaComponent } from './views/dialogs/editar-tarefa/editar-tarefa.component';
 import { CategoriaComponent } from './views/categoria/categoria.component';
 import { MatSelectModule } from '@angular/material/select';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { SobreComponent } from './views/sobre/sobre.component';
 
 
 @NgModule({
@@ -37,7 +39,8 @@ import { MatSelectModule } from '@angular/material/select';
     ListaComponent,
     ConfirmComponent,
     EditarTarefaComponent,
-    CategoriaComponent
+    CategoriaComponent,
+    SobreComponent
   ],
   imports: [
     ReactiveFormsModule,
@@ -58,7 +61,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatInputModule,
     MatDialogModule,
     HttpClientModule,
-    MatSelectModule
+    MatSelectModule,
+    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]

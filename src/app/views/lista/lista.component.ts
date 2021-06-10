@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Lista } from 'src/app/model/lista';
 import { Tarefa } from 'src/app/model/tarefa';
 import { ListaService } from 'src/app/service/lista.service';
+import { TarefaService } from 'src/app/service/tarefa.service';
 import { ConfirmComponent } from '../dialogs/confirm/confirm.component';
 import { ConfirmationVO } from '../dialogs/confirm/confirmation-vo';
 
@@ -20,8 +21,9 @@ export class ListaComponent implements OnInit {
   columns = ['nome', 'actions'];
 
   selectedLista?: Lista;
+  mostrarBotaoAdd = true;
 
-  constructor(private listaService: ListaService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
+  constructor(private listaService: ListaService, private snackBar: MatSnackBar, private dialog: MatDialog, private tarefaService: TarefaService) { }
 
   ngOnInit(): void {
     this.list();
@@ -35,8 +37,9 @@ export class ListaComponent implements OnInit {
     this.listaService.list()
       .subscribe(
         resp => {
-
           this.listas = resp;
+          if (resp.length >= 4)
+            this.mostrarBotaoAdd = false;
         },
         error => this.handleServiceError(error as HttpErrorResponse)
       );
@@ -62,21 +65,30 @@ export class ListaComponent implements OnInit {
   }
 
   confirmDelete = (removeId?: number) => {
-    const dialogResult = this.dialog.open(ConfirmComponent, {
-      width: '300px',
-      data: {
-        id: removeId,
-        answer: false
-      }
-    });
+    this.tarefaService.list()
+      .subscribe((tarefas: Array<Tarefa>) => {
+        if (tarefas.length > 0) {
+          this.showSnackbar("Não é possível excluir uma lista com tarefas.");
 
-    dialogResult.afterClosed()
-      .subscribe((resp: ConfirmationVO) => {
-        if (resp.answer && resp.id) {
-          this.delete(resp.id);
+        } else {
+
+
+          const dialogResult = this.dialog.open(ConfirmComponent, {
+            width: '300px',
+            data: {
+              id: removeId,
+              answer: false
+            }
+          });
+
+          dialogResult.afterClosed()
+            .subscribe((resp: ConfirmationVO) => {
+              if (resp.answer && resp.id) {
+                this.delete(resp.id);
+              }
+            })
         }
       })
-
   }
 
   private delete = (id: number) => {

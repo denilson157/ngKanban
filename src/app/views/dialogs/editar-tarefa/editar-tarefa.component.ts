@@ -26,13 +26,15 @@ export class EditarTarefaComponent {
   }
 
   createForm = (tarefa: Tarefa): void => {
-
+    // registra as mudanças do campo no formulario
     this.formTarefa = new FormGroup({
       nome: new FormControl(tarefa.nome),
       id: new FormControl(tarefa.id),
       listaId: new FormControl(tarefa.listaId),
-      categoriaId: new FormControl(tarefa.categoriaId)
+      categoriaId: new FormControl(tarefa.categoriaId),
+      descricao: new FormControl(tarefa.descricao)
     });
+
   }
 
   showSnackbar(msg: string): void {
@@ -46,15 +48,43 @@ export class EditarTarefaComponent {
   save = () => {
 
     const tarefa = this.getTarefa()
-    if (tarefa) {
-      if (tarefa.id)
-        this.update(tarefa);
-      else
-        this.insert(tarefa);
+
+    const tarefaValidada = this.validateTarefa(tarefa)
+    //só será criado/atualizado se os campos estiverem preenchidos
+    if (tarefaValidada) {
+
+      if (tarefa) {
+        if (tarefa.id)
+          this.update(tarefa);
+        else
+          this.insert(tarefa);
+      }
+
     }
+
   }
 
-  getTarefa = (): Tarefa | undefined => {
+  private validateTarefa = (tarefa: Tarefa | undefined): boolean => {
+    let validado = true;
+    if (tarefa) {
+
+      if (!tarefa.nome) {
+        this.showSnackbar("Preencha o nome da tarefa.");
+        validado = false;
+      }
+
+      if (!tarefa.categoriaId) {
+        this.showSnackbar("Preencha uma categoria.");
+        validado = false;
+      }
+
+    } else
+      validado = false;
+
+    return validado;
+  }
+
+  private getTarefa = (): Tarefa | undefined => {
     if (this.formTarefa)
       return this.formTarefa?.getRawValue() as Tarefa;
 
@@ -62,6 +92,7 @@ export class EditarTarefaComponent {
   }
 
   private insert = (tarefa: Tarefa): void => {
+    //insere a fecha a modal
     this.tarefaService.insert(tarefa)
       .subscribe(() => {
         this.dialogRef.close(this.data);
@@ -70,6 +101,7 @@ export class EditarTarefaComponent {
   }
 
   private update = (tarefa: Tarefa): void => {
+    //atualiza a fecha a modal
     this.tarefaService.update(tarefa)
       .subscribe(() => {
         this.dialogRef.close(this.data);
@@ -107,6 +139,7 @@ export class EditarTarefaComponent {
   }
 
   private delete = (id: number) => {
+    //deleta a fecha a modal
     if (id) {
 
       this.tarefaService.delete(id)

@@ -1,66 +1,70 @@
-<p>Listas</p>
-
-<button mat-fab color="primary" class="fabAdd" (click)="create();">
-    <mat-icon>add</mat-icon>
-</button>
-
-<div>
-    <mat-table [dataSource]="listas">
-        <ng-container matColumnDef="nome">
-
-            <mat-header-cell *matHeaderCellDef>
-                Nome
-            </mat-header-cell>
-
-            <mat-cell *matCellDef="let lista">
-                {{lista.nome}}
-            </mat-cell>
-
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-
-            <mat-header-cell *matHeaderCellDef>
-                Ações
-            </mat-header-cell>
-
-            <mat-cell *matCellDef="let lista">
-                <button mat-button (click)="select(lista);">
-                    <mat-icon>edit</mat-icon>
-                </button>
-                <button mat-button color="warn" (click)="confirmDelete(lista.id)">
-                    <mat-icon>remove_circle</mat-icon>
-                </button>
-            </mat-cell>
-
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="columns">
-
-        </mat-header-row>
-
-        <mat-row *matRowDef="let row; columns: columns">
-
-        </mat-row>
-
-    </mat-table>
-</div>
-
-<div *ngIf="selectedLista" class="editArea">
-    <h2> {{ selectedLista.id ? 'Editar' : 'Criar '}} Lista </h2>
-
-    <mat-form-field class="form-field" *ngIf="selectedLista">
-        <mat-label>Nome</mat-label>
-        <input matInput [(ngModel)]="selectedLista.nome">
-    </mat-form-field>
+<div class="contentMain">
 
 
-    <button mat-raised-button color="primary" (click)="save()">
-        Salvar
+    <p>Listas (só é possível criar 4 listas)</p>
+
+    <button *ngIf="mostrarBotaoAdd" mat-fab color="primary" class="fabAdd" (click)="create();">
+        <mat-icon>add</mat-icon>
     </button>
 
-    <button mat-raised-button class="btnAction" color="basic" (click)="cancel()">
-        Cancelar
-    </button>
+    <div>
+        <mat-table [dataSource]="listas">
+            <ng-container matColumnDef="nome">
 
+                <mat-header-cell *matHeaderCellDef>
+                    Nome
+                </mat-header-cell>
+
+                <mat-cell *matCellDef="let lista">
+                    {{lista.nome}}
+                </mat-cell>
+
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+
+                <mat-header-cell *matHeaderCellDef>
+                    Ações
+                </mat-header-cell>
+
+                <mat-cell *matCellDef="let lista">
+                    <button mat-button (click)="select(lista);">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-button color="warn" (click)="confirmDelete(lista.id)">
+                        <mat-icon>remove_circle</mat-icon>
+                    </button>
+                </mat-cell>
+
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="columns">
+
+            </mat-header-row>
+
+            <mat-row *matRowDef="let row; columns: columns">
+
+            </mat-row>
+
+        </mat-table>
+    </div>
+
+    <div *ngIf="selectedLista" class="editArea">
+        <h2> {{ selectedLista.id ? 'Editar' : 'Criar '}} Lista </h2>
+
+        <mat-form-field class="form-field" *ngIf="selectedLista">
+            <mat-label>Nome</mat-label>
+            <input matInput [(ngModel)]="selectedLista.nome">
+        </mat-form-field>
+
+
+        <button mat-raised-button color="primary" (click)="save()">
+            Salvar
+        </button>
+
+        <button mat-raised-button class="btnAction" color="basic" (click)="cancel()">
+            Cancelar
+        </button>
+
+    </div>
 </div>
