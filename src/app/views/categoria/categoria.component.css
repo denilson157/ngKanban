@@ -1,0 +1,17 @@
+.form-field {
+    width: 100%;
+}
+
+.btnAction {
+    margin: 10px;
+}
+
+.fabAdd {
+    position: fixed;
+    right: 32px;
+    bottom: 32px;
+}
+
+.editArea {
+    margin: 32px;
+}

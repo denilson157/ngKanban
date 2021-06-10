@@ -18,7 +18,20 @@
     margin: 5px;
 }
 
-.headerLista{
+.headerLista {
     align-items: center;
     justify-content: space-evenly;
+}
+
+.d-flex {
+    display: flex;
+    align-items: center;
+}
+
+.justify-content-between {
+    justify-content: space-between
+}
+
+.tarefa{
+    padding: 15px 0;
 }

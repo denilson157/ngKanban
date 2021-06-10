@@ -7,6 +7,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Tarefa } from 'src/app/model/tarefa';
 import { ListaService } from 'src/app/service/lista.service';
 import { Lista } from 'src/app/model/lista';
+import { Categoria } from 'src/app/model/categoria';
 
 @Component({
   selector: 'app-editar-tarefa',
@@ -15,10 +16,13 @@ import { Lista } from 'src/app/model/lista';
 })
 export class EditarTarefaComponent {
   formTarefa?: FormGroup;
+  categorias = new Array<Categoria>();
 
   constructor(public dialogRef: MatDialogRef<EditarTarefaComponent>,
-    @Inject(MAT_DIALOG_DATA) private tarefa: any, private tarefaService: TarefaService, private snackBar: MatSnackBar, private listaService: ListaService) {
-    this.createForm(tarefa.tarefa);
+    @Inject(MAT_DIALOG_DATA) private data: any, private tarefaService: TarefaService, private snackBar: MatSnackBar, private listaService: ListaService) {
+    this.createForm(data.tarefa);
+    this.categorias = data.categorias;
+    console.log(data);
   }
 
   createForm = (tarefa: Tarefa): void => {
@@ -26,7 +30,8 @@ export class EditarTarefaComponent {
     this.formTarefa = new FormGroup({
       nome: new FormControl(tarefa.nome),
       id: new FormControl(tarefa.id),
-      listaId: new FormControl(tarefa.listaId)
+      listaId: new FormControl(tarefa.listaId),
+      categoriaId: new FormControl(tarefa.categoriaId)
     });
   }
 
@@ -39,9 +44,6 @@ export class EditarTarefaComponent {
   }
 
   cancel = () => {
-
-
-    this.dialogRef.close(this.tarefa);
   }
 
   save = () => {
@@ -60,33 +62,75 @@ export class EditarTarefaComponent {
 
 
   private insert = (tarefa: Tarefa): void => {
-    this.tarefaService.insert(tarefa)
-      .subscribe(() => {
-        this.dialogRef.close(this.tarefa);
-        this.showSnackbar('Lista atualizada');
-      }, error => this.handleServiceError(error as HttpErrorResponse));
+    this.listaService.list()
+      .subscribe((listas: Array<Lista>) => {
+        const lista = listas.find(l => l.id === tarefa.listaId);
 
+        if (lista) {
+          tarefa.id = this.getIdTarefa(listas);
+          lista.tarefas.push(tarefa);
+
+          this.listaService.update(lista)
+            .subscribe(() => {
+              this.dialogRef.close(this.data);
+              this.showSnackbar('Lista atualizada');
+            }, error => this.handleServiceError(error as HttpErrorResponse));
+
+        }
+      }, error => this.handleServiceError(error as HttpErrorResponse));
   }
 
   private update = (tarefa: Tarefa): void => {
+    //listando todas as listas com suas tarefas
+    this.listaService.list()
+      .subscribe((listas: Array<Lista>) => {
 
-    this.listaService.get(tarefa.listaId)
-      .subscribe((lista: Lista) => {
+        //selecionando lista da tarefa
+        const lista = listas.find(l => l.id === tarefa.listaId);
 
-        this.listaService.update(lista)
-          .subscribe((updatedLista: Lista) => {
-            this.dialogRef.close(this.tarefa);
-            this.showSnackbar('Lista atualizada');
-          }, error => this.handleServiceError(error as HttpErrorResponse));
+        if (lista) {
 
+          //pega index da tarefa pelo id
+          const idx = lista.tarefas.findIndex((tare: Tarefa) => tare.id == tarefa.id);
+
+          if (idx >= 0) {
+            //atualiza tarefa pelo index
+            lista.tarefas[idx] = tarefa;
+            this.listaService.update(lista)
+              .subscribe(() => {
+                this.dialogRef.close(this.data);
+                this.showSnackbar('Lista atualizada');
+              }, error => this.handleServiceError(error as HttpErrorResponse));
+
+          }
+
+
+        }
       }, error => this.handleServiceError(error as HttpErrorResponse));
-
 
   }
 
   private handleServiceError = (error: HttpErrorResponse): void => {
     console.log(error);
     this.showSnackbar(error.statusText);
+  }
+
+  private getIdTarefa = (listas: Array<Lista>): number => {
+    let tarefas = Array<Tarefa>();
+
+    listas.forEach(l => {
+      l.tarefas.forEach(t => {
+        tarefas.push(t);
+      })
+    });
+
+    const tarefasId = tarefas.filter(s => s.id).map(x => x.id ?? 0);
+
+    let ultimoId = 0
+    if (tarefasId.length > 0)
+      ultimoId = tarefasId.reduce((p, c) => p > c ? p : c);
+
+    return (ultimoId + 1);
   }
 
 }

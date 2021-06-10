@@ -5,8 +5,9 @@ import { Lista } from 'src/app/model/lista';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EditarTarefaComponent } from '../dialogs/editar-tarefa/editar-tarefa.component';
-import { TarefaVO } from 'src/app/model/tarefa-vo';
 import { Tarefa } from 'src/app/model/tarefa';
+import { Categoria } from 'src/app/model/categoria';
+import { CategoriaService } from 'src/app/service/categoria.service';
 
 @Component({
   selector: 'app-home',
@@ -15,13 +16,23 @@ import { Tarefa } from 'src/app/model/tarefa';
 })
 export class HomeComponent implements OnInit {
   listas = new Array<Lista>();
+  categorias = new Array<Categoria>();
+
   tamanho = 0;
 
-  constructor(private listaService: ListaService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
+  constructor(private listaService: ListaService, private snackBar: MatSnackBar, private dialog: MatDialog, private categoriaService: CategoriaService) { }
 
   ngOnInit(): void {
     this.list();
+    this.listarCategorias();
+  }
 
+  private listarCategorias(): void {
+    this.categoriaService.list()
+      .subscribe(
+        resp => this.categorias = resp,
+        error => this.handleServiceError(error as HttpErrorResponse)
+      );
   }
 
   list(): void {
@@ -44,12 +55,26 @@ export class HomeComponent implements OnInit {
 
       const dialogResult = this.dialog.open(EditarTarefaComponent, {
         data: {
-          tarefa
+          tarefa: tarefa,
+          categorias: this.categorias
         }
       });
 
       dialogResult.afterClosed().subscribe(() => this.list())
     }
+
+  }
+
+  editarTarefa = (tarefa: Tarefa) => {
+
+    const dialogResult = this.dialog.open(EditarTarefaComponent, {
+      data: {
+        tarefa: tarefa,
+        categorias: this.categorias
+      }
+    });
+
+    dialogResult.afterClosed().subscribe(() => this.list())
 
   }
 

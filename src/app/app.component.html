@@ -3,7 +3,11 @@
     <button mat-icon-button (click)="sidenav.toggle();  ">
       <mat-icon>menu</mat-icon>
     </button>
-    <h1>Kanban</h1>
+    <h1>
+      <a mat-list-item routerLink="home">
+        Kanban
+      </a>
+    </h1>
   </mat-toolbar-row>
 </mat-toolbar>
 
@@ -17,6 +21,9 @@
       </a>
       <a mat-list-item routerLink="lista">
         <mat-icon class="menu-icon">list</mat-icon> Lista
+      </a>
+      <a mat-list-item routerLink="categoria">
+        <mat-icon class="menu-icon">category</mat-icon> Categoria
       </a>
     </mat-nav-list>
   </mat-sidenav>

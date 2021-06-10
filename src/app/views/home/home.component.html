@@ -7,8 +7,19 @@
                 <mat-icon>add</mat-icon>
             </button>
         </mat-card-header>
-        <mat-card-content>
 
+        <mat-card-content>
+            <div class="d-flex tarefa justify-content-between" *ngFor="let tarefa of coluna.tarefas">
+                <div>
+                    {{tarefa.nome}}
+                </div>
+                <div>
+                    <button mat-mini-fab color="primary" (click)="editarTarefa(tarefa)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </div>
+            </div>
         </mat-card-content>
+
     </mat-card>
 </div>

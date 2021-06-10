@@ -2,10 +2,6 @@
 
     <h1 mat-dialog-title>Tarefa</h1>
 
-    <div mat-dialog-content>
-        Tarefa
-    </div>
-
     <div mat-dialog-action>
         <form [formGroup]="formTarefa">
 
@@ -18,12 +14,29 @@
             </mat-form-field>
 
             <div class="d-flex">
-                <button type="submit" color="primary" (click)="save()">
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Categoria</mat-label>
+                    <mat-select formControlName="categoriaId">
+                        <mat-option [value]="0">
+                            Selecione
+                        </mat-option>
+                        <mat-option *ngFor="let cat of categorias" [value]="cat.id">
+                            {{cat.nome}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+
+            <div class="d-flex">
+                <button type="submit" mat-raised-button color="primary" (click)="save()">
                     Salvar
                 </button>
-                <button type="button" color="basic" class="btnAction" (click)="cancel()">
+                <button type="button" mat-raised-button color="basic" class="btnAction" (click)="cancel()">
                     Cancelar
                 </button>
+
             </div>
 
         </form>

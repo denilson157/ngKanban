@@ -27,6 +27,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { EditarTarefaComponent } from './views/dialogs/editar-tarefa/editar-tarefa.component';
 import { CategoriaComponent } from './views/categoria/categoria.component';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -56,7 +57,8 @@ import { CategoriaComponent } from './views/categoria/categoria.component';
     MatFormFieldModule,
     MatInputModule,
     MatDialogModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]
