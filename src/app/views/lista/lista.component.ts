@@ -34,9 +34,13 @@ export class ListaComponent implements OnInit {
   list(): void {
     this.listaService.list()
       .subscribe(
-        resp => this.listas = resp,
+        resp => {
+
+          this.listas = resp;
+        },
         error => this.handleServiceError(error as HttpErrorResponse)
       );
+
   }
 
   select = (lista: Lista) => {

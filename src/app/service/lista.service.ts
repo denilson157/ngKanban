@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Lista } from '../model/lista';
+import { TarefaService } from './tarefa.service';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class ListaService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private tarefaService: TarefaService) { }
 
   list = (): Observable<Array<Lista>> => {
     return this.http.get<Array<Lista>>(`${environment.apiUrl}listas`);

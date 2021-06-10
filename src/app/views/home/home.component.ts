@@ -8,6 +8,7 @@ import { EditarTarefaComponent } from '../dialogs/editar-tarefa/editar-tarefa.co
 import { Tarefa } from 'src/app/model/tarefa';
 import { Categoria } from 'src/app/model/categoria';
 import { CategoriaService } from 'src/app/service/categoria.service';
+import { TarefaService } from 'src/app/service/tarefa.service';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +21,7 @@ export class HomeComponent implements OnInit {
 
   tamanho = 0;
 
-  constructor(private listaService: ListaService, private snackBar: MatSnackBar, private dialog: MatDialog, private categoriaService: CategoriaService) { }
+  constructor(private listaService: ListaService, private snackBar: MatSnackBar, private dialog: MatDialog, private categoriaService: CategoriaService, private tarefaService: TarefaService) { }
 
   ngOnInit(): void {
     this.list();
@@ -36,15 +37,29 @@ export class HomeComponent implements OnInit {
   }
 
   list(): void {
+
     this.listaService.list()
       .subscribe(
-        resp => {
+        (listas: Array<Lista>) => {
+          this.tamanho = 100 / listas.length;
 
-          this.listas = resp;
-          this.tamanho = 100 / resp.length;
-        },
-        error => this.handleServiceError(error as HttpErrorResponse)
+          this.tarefaService.list()
+            .subscribe((tarefas: Array<Tarefa>) => {
+              const listaAtualizar = listas;
+
+              listaAtualizar.forEach(lista => {
+                lista.tarefas = tarefas.filter(x => x.listaId === lista.id);
+              });
+
+              this.listas = listaAtualizar;
+
+            }, error => this.handleServiceError(error as HttpErrorResponse));
+
+        }, error => this.handleServiceError(error as HttpErrorResponse)
+
       );
+
+
   }
 
   novaTarefa = (listaId?: number) => {

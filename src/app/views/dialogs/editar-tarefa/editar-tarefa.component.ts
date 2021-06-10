@@ -1,28 +1,28 @@
 import { Component, Inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TarefaService } from 'src/app/service/tarefa.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Tarefa } from 'src/app/model/tarefa';
-import { ListaService } from 'src/app/service/lista.service';
-import { Lista } from 'src/app/model/lista';
 import { Categoria } from 'src/app/model/categoria';
+import { ConfirmComponent } from '../confirm/confirm.component';
+import { ConfirmationVO } from '../confirm/confirmation-vo';
 
 @Component({
   selector: 'app-editar-tarefa',
   templateUrl: './editar-tarefa.component.html',
   styleUrls: ['./editar-tarefa.component.css']
 })
+
 export class EditarTarefaComponent {
   formTarefa?: FormGroup;
   categorias = new Array<Categoria>();
 
   constructor(public dialogRef: MatDialogRef<EditarTarefaComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: any, private tarefaService: TarefaService, private snackBar: MatSnackBar, private listaService: ListaService) {
+    @Inject(MAT_DIALOG_DATA) private data: any, private tarefaService: TarefaService, private snackBar: MatSnackBar, private dialog: MatDialog) {
     this.createForm(data.tarefa);
     this.categorias = data.categorias;
-    console.log(data);
   }
 
   createForm = (tarefa: Tarefa): void => {
@@ -35,79 +35,46 @@ export class EditarTarefaComponent {
     });
   }
 
-  create = (): void => {
-
-  }
-
   showSnackbar(msg: string): void {
     this.snackBar.open(msg, '', { duration: 3000 });
   }
 
   cancel = () => {
+    this.dialogRef.close(this.data);
   }
 
   save = () => {
 
-    if (this.formTarefa) {
-
-      const tarefa = this.formTarefa?.getRawValue() as Tarefa;
-
+    const tarefa = this.getTarefa()
+    if (tarefa) {
       if (tarefa.id)
         this.update(tarefa);
       else
         this.insert(tarefa);
-
     }
   }
 
+  getTarefa = (): Tarefa | undefined => {
+    if (this.formTarefa)
+      return this.formTarefa?.getRawValue() as Tarefa;
+
+    return;
+  }
 
   private insert = (tarefa: Tarefa): void => {
-    this.listaService.list()
-      .subscribe((listas: Array<Lista>) => {
-        const lista = listas.find(l => l.id === tarefa.listaId);
-
-        if (lista) {
-          tarefa.id = this.getIdTarefa(listas);
-          lista.tarefas.push(tarefa);
-
-          this.listaService.update(lista)
-            .subscribe(() => {
-              this.dialogRef.close(this.data);
-              this.showSnackbar('Lista atualizada');
-            }, error => this.handleServiceError(error as HttpErrorResponse));
-
-        }
+    this.tarefaService.insert(tarefa)
+      .subscribe(() => {
+        this.dialogRef.close(this.data);
+        this.showSnackbar('Tarefa inserida');
       }, error => this.handleServiceError(error as HttpErrorResponse));
   }
 
   private update = (tarefa: Tarefa): void => {
-    //listando todas as listas com suas tarefas
-    this.listaService.list()
-      .subscribe((listas: Array<Lista>) => {
-
-        //selecionando lista da tarefa
-        const lista = listas.find(l => l.id === tarefa.listaId);
-
-        if (lista) {
-
-          //pega index da tarefa pelo id
-          const idx = lista.tarefas.findIndex((tare: Tarefa) => tare.id == tarefa.id);
-
-          if (idx >= 0) {
-            //atualiza tarefa pelo index
-            lista.tarefas[idx] = tarefa;
-            this.listaService.update(lista)
-              .subscribe(() => {
-                this.dialogRef.close(this.data);
-                this.showSnackbar('Lista atualizada');
-              }, error => this.handleServiceError(error as HttpErrorResponse));
-
-          }
-
-
-        }
+    this.tarefaService.update(tarefa)
+      .subscribe(() => {
+        this.dialogRef.close(this.data);
+        this.showSnackbar(`Tarefa ${tarefa.id} atualizada`);
       }, error => this.handleServiceError(error as HttpErrorResponse));
-
   }
 
   private handleServiceError = (error: HttpErrorResponse): void => {
@@ -115,22 +82,42 @@ export class EditarTarefaComponent {
     this.showSnackbar(error.statusText);
   }
 
-  private getIdTarefa = (listas: Array<Lista>): number => {
-    let tarefas = Array<Tarefa>();
+  confirmDelete = () => {
 
-    listas.forEach(l => {
-      l.tarefas.forEach(t => {
-        tarefas.push(t);
-      })
-    });
+    const tarefa = this.getTarefa();
 
-    const tarefasId = tarefas.filter(s => s.id).map(x => x.id ?? 0);
+    if (tarefa) {
 
-    let ultimoId = 0
-    if (tarefasId.length > 0)
-      ultimoId = tarefasId.reduce((p, c) => p > c ? p : c);
+      const dialogResult = this.dialog.open(ConfirmComponent, {
+        width: '300px',
+        data: {
+          id: tarefa.id,
+          answer: false
+        }
+      });
 
-    return (ultimoId + 1);
+      dialogResult.afterClosed()
+        .subscribe((resp: ConfirmationVO) => {
+          if (resp.answer && resp.id) {
+            this.delete(resp.id);
+          }
+        })
+    }
+
+  }
+
+  private delete = (id: number) => {
+    if (id) {
+
+      this.tarefaService.delete(id)
+        .subscribe(
+          () => {
+            this.cancel();
+            this.showSnackbar(`Tarefa ${id} excluída`);
+          },
+          error => this.handleServiceError(error as HttpErrorResponse)
+        )
+    }
   }
 
 }
